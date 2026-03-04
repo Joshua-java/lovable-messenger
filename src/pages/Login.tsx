@@ -35,7 +35,7 @@ const Login = () => {
     const user = { phone, password, username: phone };
     localStorage.setItem("user", JSON.stringify(user));
     toast({ title: "Welcome!", description: "Logged in successfully." });
-    navigate("/chat");
+    navigate("/discover");
   };
 
   return (
