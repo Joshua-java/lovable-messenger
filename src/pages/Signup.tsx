@@ -14,6 +14,8 @@ const Signup = () => {
   const [form, setForm] = useState({
     phone: "",
     password: "",
+    name: "",
+    gender: "",
     city: "",
     state: "",
     country: "",
@@ -39,10 +41,10 @@ const Signup = () => {
       return;
     }
 
-    const user = { ...form, avatar, username: form.phone };
+    const user = { ...form, avatar, username: form.name || form.phone };
     localStorage.setItem("user", JSON.stringify(user));
     toast({ title: "Account created!", description: "Welcome to ChatFlow." });
-    navigate("/chat");
+    navigate("/discover");
   };
 
   const update = (key: string, value: string) => setForm((p) => ({ ...p, [key]: value }));
@@ -80,8 +82,13 @@ const Signup = () => {
             </div>
 
             <div className="space-y-1.5">
+              <Label htmlFor="name">Full Name</Label>
+              <Input id="name" placeholder="Your name" value={form.name} onChange={(e) => update("name", e.target.value)} />
+            </div>
+
+            <div className="space-y-1.5">
               <Label htmlFor="phone">Phone Number</Label>
-              <Input id="phone" type="tel" placeholder="+1 234 567 8900" value={form.phone} onChange={(e) => update("phone", e.target.value)} />
+              <Input id="phone" type="tel" placeholder="+234 800 000 0000" value={form.phone} onChange={(e) => update("phone", e.target.value)} />
             </div>
 
             <div className="space-y-1.5">
@@ -94,20 +101,40 @@ const Signup = () => {
               </div>
             </div>
 
+            <div className="space-y-1.5">
+              <Label>Gender</Label>
+              <div className="flex gap-3">
+                {["Male", "Female"].map((g) => (
+                  <button
+                    key={g}
+                    type="button"
+                    onClick={() => update("gender", g.toLowerCase())}
+                    className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-colors ${
+                      form.gender === g.toLowerCase()
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-muted text-muted-foreground border-border hover:border-primary/50"
+                    }`}
+                  >
+                    {g}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label htmlFor="city">City</Label>
-                <Input id="city" placeholder="City" value={form.city} onChange={(e) => update("city", e.target.value)} />
+                <Input id="city" placeholder="e.g. Uyo" value={form.city} onChange={(e) => update("city", e.target.value)} />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="state">State</Label>
-                <Input id="state" placeholder="State" value={form.state} onChange={(e) => update("state", e.target.value)} />
+                <Input id="state" placeholder="e.g. Akwa Ibom" value={form.state} onChange={(e) => update("state", e.target.value)} />
               </div>
             </div>
 
             <div className="space-y-1.5">
               <Label htmlFor="country">Country</Label>
-              <Input id="country" placeholder="Country" value={form.country} onChange={(e) => update("country", e.target.value)} />
+              <Input id="country" placeholder="e.g. Nigeria" value={form.country} onChange={(e) => update("country", e.target.value)} />
             </div>
 
             <Button type="submit" className="w-full" size="lg">Sign Up</Button>
