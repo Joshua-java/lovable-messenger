@@ -5,52 +5,59 @@ import heroImage from "@/assets/hero-welcome.jpg";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      {/* Nav */}
-      <nav className="flex items-center justify-between px-6 md:px-12 py-4 bg-card border-b border-border">
-        <div className="flex items-center gap-2">
-          <MessageCircle className="w-7 h-7 text-primary" />
-          <span className="text-xl font-bold text-foreground">ChatFlow</span>
-        </div>
-        <div className="flex items-center gap-2 md:gap-4">
-          <Link to="/about">
-            <Button variant="ghost" size="sm">About</Button>
-          </Link>
-          <Link to="/chat">
-            <Button variant="ghost" size="sm">Sign Up</Button>
-          </Link>
-          <Link to="/chat">
-            <Button variant="ghost" size="sm">Login</Button>
-          </Link>
-          <Link to="/chat">
-            <Button size="sm">Get Started</Button>
-          </Link>
-        </div>
-      </nav>
+    <div className="relative min-h-screen">
+      {/* Fullscreen background image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${heroImage})` }}
+      />
+      <div className="absolute inset-0 bg-foreground/60" />
 
-      {/* Hero */}
-      <section className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 px-6 md:px-12 py-16 md:py-24 max-w-6xl mx-auto">
-        <div className="flex-1 text-center md:text-left space-y-6">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
+      {/* Content overlay */}
+      <div className="relative z-10 min-h-screen flex flex-col">
+        {/* Nav */}
+        <nav className="flex items-center justify-between px-6 md:px-12 py-4">
+          <div className="flex items-center gap-2">
+            <MessageCircle className="w-7 h-7 text-primary" />
+            <span className="text-xl font-bold text-primary-foreground">ChatFlow</span>
+          </div>
+          <div className="flex items-center gap-2 md:gap-4">
+            <Link to="/signup">
+              <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-primary-foreground/10">
+                Sign Up
+              </Button>
+            </Link>
+            <Link to="/login">
+              <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-primary-foreground/10">
+                Login
+              </Button>
+            </Link>
+            <Link to="/signup">
+              <Button size="sm">Get Started</Button>
+            </Link>
+          </div>
+        </nav>
+
+        {/* Hero content */}
+        <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-primary-foreground leading-tight max-w-2xl">
             Connect with anyone, <span className="text-primary">anywhere</span>.
           </h1>
-          <p className="text-lg text-muted-foreground max-w-md mx-auto md:mx-0">
-            Simple, fast, and reliable messaging. Start chatting with friends and family today.
+          <p className="text-lg md:text-xl text-primary-foreground/80 mt-4 max-w-md">
+            Simple, fast, and reliable messaging. Start chatting today.
           </p>
-          <Link to="/chat">
-            <Button size="lg" className="mt-4 text-base px-8">
-              Start Chatting
-            </Button>
-          </Link>
+          <div className="flex gap-4 mt-8">
+            <Link to="/signup">
+              <Button size="lg" className="text-base px-8">Create Account</Button>
+            </Link>
+            <Link to="/login">
+              <Button size="lg" variant="outline" className="text-base px-8 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
+                Login
+              </Button>
+            </Link>
+          </div>
         </div>
-        <div className="flex-1 max-w-lg">
-          <img
-            src={heroImage}
-            alt="Welcome to ChatFlow"
-            className="rounded-2xl shadow-xl w-full object-cover"
-          />
-        </div>
-      </section>
+      </div>
     </div>
   );
 };
