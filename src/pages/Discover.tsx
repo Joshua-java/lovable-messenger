@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const CITY_COORDS: Record<string, { lat: number; lng: number }> = {
   uyo: { lat: 5.05, lng: 7.93 },
@@ -113,6 +114,7 @@ const Discover = () => {
             </Avatar>
           )}
           <span className="text-sm text-muted-foreground hidden sm:block">{myCity || "No location"}</span>
+          <ThemeToggle />
           <Button variant="ghost" size="icon" onClick={handleLogout} className="text-muted-foreground hover:text-destructive">
             <LogOut className="w-4 h-4" />
           </Button>

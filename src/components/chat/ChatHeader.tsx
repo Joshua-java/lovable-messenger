@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { LogOut, MessageCircle } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import ThemeToggle from "@/components/ThemeToggle";
 
 interface ChatHeaderProps {
   username: string;
@@ -23,7 +24,8 @@ const ChatHeader = ({ username, avatar }: ChatHeaderProps) => {
         <span className="font-bold text-foreground text-lg">ChatFlow</span>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
+        <ThemeToggle />
         <div className="flex items-center gap-2">
           <Avatar className="w-8 h-8">
             {avatar ? (
