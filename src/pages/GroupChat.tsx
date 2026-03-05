@@ -4,6 +4,7 @@ import { ArrowLeft, MapPin, Users, MessageCircle, Image as ImageIcon } from "luc
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import ThemeToggle from "@/components/ThemeToggle";
 import MessageInput from "@/components/chat/MessageInput";
 
 interface GroupPost {

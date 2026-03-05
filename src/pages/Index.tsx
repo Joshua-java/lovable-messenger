@@ -23,6 +23,7 @@ const Index = () => {
             <span className="text-xl font-bold text-primary-foreground">ChatFlow</span>
           </div>
           <div className="flex items-center gap-2 md:gap-4">
+            <ThemeToggle />
             <Link to="/signup">
               <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-primary-foreground/10">
                 Sign Up

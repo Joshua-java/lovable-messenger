@@ -24,7 +24,8 @@ const ChatHeader = ({ username, avatar }: ChatHeaderProps) => {
         <span className="font-bold text-foreground text-lg">ChatFlow</span>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
+        <ThemeToggle />
         <div className="flex items-center gap-2">
           <Avatar className="w-8 h-8">
             {avatar ? (
