@@ -8,6 +8,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Discover from "./pages/Discover";
 import Chat from "./pages/Chat";
+import GroupChat from "./pages/GroupChat";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/discover" element={<Discover />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/group" element={<GroupChat />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

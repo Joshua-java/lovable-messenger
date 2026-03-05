@@ -72,31 +72,17 @@ const Discover = () => {
 
   const filteredUsers = useMemo(() => {
     let users = MOCK_USERS.filter((u) => u.phone !== user?.phone);
-
-    if (genderFilter !== "all") {
-      users = users.filter((u) => u.gender === genderFilter);
-    }
-
+    if (genderFilter !== "all") users = users.filter((u) => u.gender === genderFilter);
     if (search.trim()) {
       const q = search.toLowerCase();
-      users = users.filter(
-        (u) => u.name.toLowerCase().includes(q) || u.city.toLowerCase().includes(q) || u.bio.toLowerCase().includes(q)
-      );
+      users = users.filter((u) => u.name.toLowerCase().includes(q) || u.city.toLowerCase().includes(q) || u.bio.toLowerCase().includes(q));
     }
-
     users.sort((a, b) => getDistance(myCity, a.city) - getDistance(myCity, b.city));
-
-    if (showNearbyOnly && myCity) {
-      users = users.filter((u) => getDistance(myCity, u.city) < 150);
-    }
-
+    if (showNearbyOnly && myCity) users = users.filter((u) => getDistance(myCity, u.city) < 150);
     return users;
   }, [genderFilter, search, showNearbyOnly, myCity, user?.phone]);
 
-  if (!user) {
-    navigate("/login");
-    return null;
-  }
+  if (!user) { navigate("/login"); return null; }
 
   const getDistanceLabel = (city: string) => {
     if (!myCity) return "";
@@ -110,10 +96,7 @@ const Discover = () => {
     navigate("/chat");
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    navigate("/");
-  };
+  const handleLogout = () => { localStorage.removeItem("user"); navigate("/"); };
 
   return (
     <div className="h-screen flex flex-col bg-background">
@@ -136,8 +119,23 @@ const Discover = () => {
         </div>
       </div>
 
+      {/* Group Chat Banner */}
+      <button
+        onClick={() => navigate("/group")}
+        className="mx-4 mt-3 flex items-center gap-3 p-3 rounded-xl bg-primary/10 border border-primary/20 hover:bg-primary/15 transition-colors"
+      >
+        <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0">
+          <Users className="w-5 h-5 text-primary-foreground" />
+        </div>
+        <div className="flex-1 text-left">
+          <p className="font-semibold text-foreground text-sm">{myCity ? `${myCity} Community` : "Local Community"}</p>
+          <p className="text-xs text-muted-foreground">Join your local group chat • Share & connect</p>
+        </div>
+        <MessageCircle className="w-5 h-5 text-primary" />
+      </button>
+
       {/* Filters */}
-      <div className="px-4 py-3 border-b border-border bg-card space-y-3">
+      <div className="px-4 py-3 border-b border-border space-y-3">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input placeholder="Search by name, city, or interest..." className="pl-9 bg-muted border-0" value={search} onChange={(e) => setSearch(e.target.value)} />
@@ -145,22 +143,15 @@ const Discover = () => {
         <div className="flex items-center gap-2 flex-wrap">
           <Filter className="w-4 h-4 text-muted-foreground" />
           {(["all", "male", "female"] as const).map((g) => (
-            <button
-              key={g}
-              onClick={() => setGenderFilter(g)}
-              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                genderFilter === g ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-accent"
-              }`}
+            <button key={g} onClick={() => setGenderFilter(g)}
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${genderFilter === g ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-accent"}`}
             >
               {g === "all" ? "All" : g === "male" ? "👨 Male" : "👩 Female"}
             </button>
           ))}
           <span className="w-px h-4 bg-border" />
-          <button
-            onClick={() => setShowNearbyOnly(!showNearbyOnly)}
-            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-              showNearbyOnly ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-accent"
-            }`}
+          <button onClick={() => setShowNearbyOnly(!showNearbyOnly)}
+            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${showNearbyOnly ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-accent"}`}
           >
             📍 Nearby only
           </button>
@@ -175,9 +166,7 @@ const Discover = () => {
             <p className="text-muted-foreground font-medium">No people found</p>
             <p className="text-sm text-muted-foreground/70 mt-1">Try changing your filters or search</p>
             {showNearbyOnly && (
-              <Button variant="outline" size="sm" className="mt-3" onClick={() => setShowNearbyOnly(false)}>
-                Show all regions
-              </Button>
+              <Button variant="outline" size="sm" className="mt-3" onClick={() => setShowNearbyOnly(false)}>Show all regions</Button>
             )}
           </div>
         ) : (
@@ -186,9 +175,7 @@ const Discover = () => {
               const distLabel = getDistanceLabel(person.city);
               const isSameCity = myCity.toLowerCase() === person.city.toLowerCase();
               return (
-                <button
-                  key={person.id}
-                  onClick={() => handleSelectUser(person)}
+                <button key={person.id} onClick={() => handleSelectUser(person)}
                   className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-accent/50 transition-colors text-left"
                 >
                   <div className="relative">
