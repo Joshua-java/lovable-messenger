@@ -114,6 +114,7 @@ const Discover = () => {
             </Avatar>
           )}
           <span className="text-sm text-muted-foreground hidden sm:block">{myCity || "No location"}</span>
+          <ThemeToggle />
           <Button variant="ghost" size="icon" onClick={handleLogout} className="text-muted-foreground hover:text-destructive">
             <LogOut className="w-4 h-4" />
           </Button>

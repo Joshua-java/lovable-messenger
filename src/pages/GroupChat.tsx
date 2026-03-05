@@ -146,6 +146,7 @@ const GroupChat = () => {
             </div>
           </div>
         </div>
+        <ThemeToggle />
       </div>
 
       {/* Filter bar */}
