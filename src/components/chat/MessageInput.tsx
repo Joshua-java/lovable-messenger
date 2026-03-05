@@ -2,17 +2,20 @@ import { useState, useRef } from "react";
 import { Send, ImagePlus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import EmojiPicker from "./EmojiPicker";
 
 interface MessageInputProps {
   onSendText: (text: string) => void;
   onSendImage: (file: File, caption?: string) => void;
+  placeholder?: string;
 }
 
-const MessageInput = ({ onSendText, onSendImage }: MessageInputProps) => {
+const MessageInput = ({ onSendText, onSendImage, placeholder = "Type a message..." }: MessageInputProps) => {
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSend = () => {
     if (imageFile) {
@@ -43,6 +46,11 @@ const MessageInput = ({ onSendText, onSendImage }: MessageInputProps) => {
     if (fileRef.current) fileRef.current.value = "";
   };
 
+  const handleEmojiSelect = (emoji: string) => {
+    setText((prev) => prev + emoji);
+    inputRef.current?.focus();
+  };
+
   return (
     <div className="border-t border-border bg-card">
       {imagePreview && (
@@ -56,15 +64,17 @@ const MessageInput = ({ onSendText, onSendImage }: MessageInputProps) => {
         </div>
       )}
       <div className="flex items-center gap-2 px-4 py-3">
-        <input ref={fileRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+        <input ref={fileRef} type="file" accept="image/*,video/*" onChange={handleFileChange} className="hidden" />
         <Button variant="ghost" size="icon" onClick={() => fileRef.current?.click()} className="text-muted-foreground hover:text-primary shrink-0">
           <ImagePlus className="w-5 h-5" />
         </Button>
+        <EmojiPicker onSelect={handleEmojiSelect} />
         <Input
+          ref={inputRef}
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
-          placeholder="Type a message..."
+          placeholder={placeholder}
           className="flex-1 bg-muted border-0"
         />
         <Button onClick={handleSend} size="icon" disabled={!text.trim() && !imageFile} className="shrink-0">
