@@ -67,7 +67,7 @@ const Index = () => {
 
           <motion.h1
             {...floatingAnim(0.2, 30)}
-            className="text-5xl md:text-7xl font-bold text-foreground leading-[1.1] max-w-3xl tracking-tight"
+            className="text-5xl md:text-7xl font-bold text-white leading-[1.1] max-w-3xl tracking-tight"
           >
             Chat, Share &{" "}
             <span className="text-primary relative">
