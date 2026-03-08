@@ -78,7 +78,7 @@ const UserProfileModal = ({ user, onClose, onChat }: UserProfileModalProps) => {
             {/* Online badge */}
             {user.online && (
               <div className="absolute top-4 left-4">
-                <Badge className="bg-emerald-500 text-white border-0 shadow-lg text-xs gap-1">
+                <Badge className="border-0 shadow-lg text-xs gap-1" style={{ backgroundColor: "hsl(var(--success))", color: "white" }}>
                   <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                   Online now
                 </Badge>
