@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 const floatingAnim = (delay: number, y: number = 20) => ({
   initial: { opacity: 0, y },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.7, delay, ease: "easeOut" },
+  transition: { duration: 0.7, delay, ease: "easeOut" as const },
 });
 
 const Index = () => {
