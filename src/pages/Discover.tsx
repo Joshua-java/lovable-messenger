@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { Search, MapPin, Filter, MessageCircle, LogOut, Users, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import ThemeToggle from "@/components/ThemeToggle";
+import UserProfileModal from "@/components/UserProfileModal";
 
 const CITY_COORDS: Record<string, { lat: number; lng: number }> = {
   uyo: { lat: 5.05, lng: 7.93 }, eket: { lat: 4.64, lng: 7.94 }, "port harcourt": { lat: 4.82, lng: 7.03 },
@@ -20,23 +21,26 @@ const getDistance = (city1: string, city2: string): number => {
   return Math.sqrt(((a.lat - b.lat) * 111) ** 2 + ((a.lng - b.lng) * 111) ** 2);
 };
 
-interface MockUser { id: string; name: string; phone: string; gender: string; city: string; state: string; country: string; avatar: string | null; online: boolean; bio: string; }
+interface MockUser {
+  id: string; name: string; phone: string; gender: string; city: string; state: string;
+  country: string; avatar: string | null; online: boolean; bio: string; photos?: string[];
+}
 
 const MOCK_USERS: MockUser[] = [
-  { id: "1", name: "Aniekan Udoh", phone: "+234 812 000 0001", gender: "male", city: "Uyo", state: "Akwa Ibom", country: "Nigeria", avatar: null, online: true, bio: "Love music and tech 🎵" },
-  { id: "2", name: "Blessing Edet", phone: "+234 812 000 0002", gender: "female", city: "Uyo", state: "Akwa Ibom", country: "Nigeria", avatar: null, online: true, bio: "Fashion designer ✨" },
-  { id: "3", name: "Emem Bassey", phone: "+234 812 000 0003", gender: "female", city: "Eket", state: "Akwa Ibom", country: "Nigeria", avatar: null, online: false, bio: "Foodie & traveler 🌍" },
-  { id: "4", name: "Nsikak James", phone: "+234 812 000 0004", gender: "male", city: "Eket", state: "Akwa Ibom", country: "Nigeria", avatar: null, online: true, bio: "Software developer 💻" },
-  { id: "5", name: "Iniobong Akpan", phone: "+234 812 000 0005", gender: "female", city: "Ikot Ekpene", state: "Akwa Ibom", country: "Nigeria", avatar: null, online: false, bio: "Nurse and proud mom 💉" },
-  { id: "6", name: "Okon Sunday", phone: "+234 812 000 0006", gender: "male", city: "Oron", state: "Akwa Ibom", country: "Nigeria", avatar: null, online: true, bio: "Fisherman by trade 🐟" },
-  { id: "7", name: "Grace Okon", phone: "+234 812 000 0007", gender: "female", city: "Calabar", state: "Cross River", country: "Nigeria", avatar: null, online: true, bio: "Entrepreneur & baker 🍰" },
-  { id: "8", name: "Chidi Nwosu", phone: "+234 812 000 0008", gender: "male", city: "Port Harcourt", state: "Rivers", country: "Nigeria", avatar: null, online: false, bio: "Oil & gas engineer ⛽" },
-  { id: "9", name: "Amaka Eze", phone: "+234 812 000 0009", gender: "female", city: "Port Harcourt", state: "Rivers", country: "Nigeria", avatar: null, online: true, bio: "Lawyer and writer 📚" },
-  { id: "10", name: "Uduak Udo", phone: "+234 812 000 0010", gender: "male", city: "Uyo", state: "Akwa Ibom", country: "Nigeria", avatar: null, online: false, bio: "Gym rat 💪" },
-  { id: "11", name: "Imaobong Essien", phone: "+234 812 000 0011", gender: "female", city: "Uyo", state: "Akwa Ibom", country: "Nigeria", avatar: null, online: true, bio: "Student & dreamer 🌟" },
-  { id: "12", name: "Effiong Brown", phone: "+234 812 000 0012", gender: "male", city: "Aba", state: "Abia", country: "Nigeria", avatar: null, online: false, bio: "Trader & hustler 💼" },
-  { id: "13", name: "Nkechi Obi", phone: "+234 812 000 0013", gender: "female", city: "Enugu", state: "Enugu", country: "Nigeria", avatar: null, online: true, bio: "Artist & painter 🎨" },
-  { id: "14", name: "Kingsley Etim", phone: "+234 812 000 0014", gender: "male", city: "Calabar", state: "Cross River", country: "Nigeria", avatar: null, online: true, bio: "Chef extraordinaire 👨‍🍳" },
+  { id: "1", name: "Aniekan Udoh", phone: "+234 812 000 0001", gender: "male", city: "Uyo", state: "Akwa Ibom", country: "Nigeria", avatar: null, online: true, bio: "Love music and tech 🎵", photos: ["/mock/person1.jpg"] },
+  { id: "2", name: "Blessing Edet", phone: "+234 812 000 0002", gender: "female", city: "Uyo", state: "Akwa Ibom", country: "Nigeria", avatar: null, online: true, bio: "Fashion designer ✨", photos: ["/mock/person2.jpg"] },
+  { id: "3", name: "Emem Bassey", phone: "+234 812 000 0003", gender: "female", city: "Eket", state: "Akwa Ibom", country: "Nigeria", avatar: null, online: false, bio: "Foodie & traveler 🌍", photos: ["/mock/person3.jpg"] },
+  { id: "4", name: "Nsikak James", phone: "+234 812 000 0004", gender: "male", city: "Eket", state: "Akwa Ibom", country: "Nigeria", avatar: null, online: true, bio: "Software developer 💻", photos: ["/mock/person4.jpg"] },
+  { id: "5", name: "Iniobong Akpan", phone: "+234 812 000 0005", gender: "female", city: "Ikot Ekpene", state: "Akwa Ibom", country: "Nigeria", avatar: null, online: false, bio: "Nurse and proud mom 💉", photos: ["/mock/person5.jpg"] },
+  { id: "6", name: "Okon Sunday", phone: "+234 812 000 0006", gender: "male", city: "Oron", state: "Akwa Ibom", country: "Nigeria", avatar: null, online: true, bio: "Fisherman by trade 🐟", photos: ["/mock/person6.jpg"] },
+  { id: "7", name: "Grace Okon", phone: "+234 812 000 0007", gender: "female", city: "Calabar", state: "Cross River", country: "Nigeria", avatar: null, online: true, bio: "Entrepreneur & baker 🍰", photos: ["/mock/person7.jpg"] },
+  { id: "8", name: "Chidi Nwosu", phone: "+234 812 000 0008", gender: "male", city: "Port Harcourt", state: "Rivers", country: "Nigeria", avatar: null, online: false, bio: "Oil & gas engineer ⛽", photos: ["/mock/person8.jpg"] },
+  { id: "9", name: "Amaka Eze", phone: "+234 812 000 0009", gender: "female", city: "Port Harcourt", state: "Rivers", country: "Nigeria", avatar: null, online: true, bio: "Lawyer and writer 📚", photos: ["/mock/person9.jpg"] },
+  { id: "10", name: "Uduak Udo", phone: "+234 812 000 0010", gender: "male", city: "Uyo", state: "Akwa Ibom", country: "Nigeria", avatar: null, online: false, bio: "Gym rat 💪", photos: ["/mock/person10.jpg"] },
+  { id: "11", name: "Imaobong Essien", phone: "+234 812 000 0011", gender: "female", city: "Uyo", state: "Akwa Ibom", country: "Nigeria", avatar: null, online: true, bio: "Student & dreamer 🌟", photos: ["/mock/person11.jpg"] },
+  { id: "12", name: "Effiong Brown", phone: "+234 812 000 0012", gender: "male", city: "Aba", state: "Abia", country: "Nigeria", avatar: null, online: false, bio: "Trader & hustler 💼", photos: ["/mock/person12.jpg"] },
+  { id: "13", name: "Nkechi Obi", phone: "+234 812 000 0013", gender: "female", city: "Enugu", state: "Enugu", country: "Nigeria", avatar: null, online: true, bio: "Artist & painter 🎨", photos: ["/mock/person13.jpg"] },
+  { id: "14", name: "Kingsley Etim", phone: "+234 812 000 0014", gender: "male", city: "Calabar", state: "Cross River", country: "Nigeria", avatar: null, online: true, bio: "Chef extraordinaire 👨‍🍳", photos: ["/mock/person14.jpg"] },
 ];
 
 const Discover = () => {
@@ -44,6 +48,7 @@ const Discover = () => {
   const [search, setSearch] = useState("");
   const [genderFilter, setGenderFilter] = useState<"all" | "male" | "female">("all");
   const [showNearbyOnly, setShowNearbyOnly] = useState(true);
+  const [selectedUser, setSelectedUser] = useState<MockUser | null>(null);
 
   const stored = localStorage.getItem("user");
   const user = stored ? JSON.parse(stored) : null;
@@ -69,8 +74,9 @@ const Discover = () => {
     return d < 1 ? "Same city" : `~${Math.round(d)} km away`;
   };
 
-  const handleSelectUser = (selectedUser: MockUser) => {
-    sessionStorage.setItem("chatWith", JSON.stringify(selectedUser));
+  const handleStartChat = (person: MockUser) => {
+    sessionStorage.setItem("chatWith", JSON.stringify(person));
+    setSelectedUser(null);
     navigate("/chat");
   };
 
@@ -151,11 +157,16 @@ const Discover = () => {
             {filteredUsers.map((person) => {
               const distLabel = getDistanceLabel(person.city);
               const isSameCity = myCity.toLowerCase() === person.city.toLowerCase();
+              const mainPhoto = person.photos?.[0];
               return (
-                <button key={person.id} onClick={() => handleSelectUser(person)} className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-accent/50 transition-colors text-left">
+                <button key={person.id} onClick={() => setSelectedUser(person)} className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-accent/50 transition-colors text-left">
                   <div className="relative">
                     <Avatar className="w-12 h-12">
-                      <AvatarFallback className="bg-primary/10 text-primary font-semibold">{person.name.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
+                      {mainPhoto ? (
+                        <AvatarImage src={mainPhoto} alt={person.name} className="object-cover" />
+                      ) : (
+                        <AvatarFallback className="bg-primary/10 text-primary font-semibold">{person.name.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
+                      )}
                     </Avatar>
                     {person.online && <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-card" style={{ backgroundColor: "hsl(var(--success))" }} />}
                   </div>
@@ -178,6 +189,15 @@ const Discover = () => {
           </div>
         )}
       </div>
+
+      {/* Profile Modal */}
+      {selectedUser && (
+        <UserProfileModal
+          user={selectedUser}
+          onClose={() => setSelectedUser(null)}
+          onChat={handleStartChat}
+        />
+      )}
     </div>
   );
 };

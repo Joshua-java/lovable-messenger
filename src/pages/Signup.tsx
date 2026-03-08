@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { MessageCircle, Upload, Eye, EyeOff } from "lucide-react";
+import { MessageCircle, Upload, Eye, EyeOff, X, ImagePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,7 +10,7 @@ import heroImage from "@/assets/hero-welcome.jpg";
 const Signup = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [avatar, setAvatar] = useState<string | null>(null);
+  const [photos, setPhotos] = useState<string[]>([]);
   const [form, setForm] = useState({
     phone: "",
     password: "",
@@ -22,12 +22,21 @@ const Signup = () => {
   });
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setAvatar(reader.result as string);
-      reader.readAsDataURL(file);
+    const files = Array.from(e.target.files || []);
+    if (photos.length + files.length > 4) {
+      toast({ title: "Limit reached", description: "You can upload up to 4 photos.", variant: "destructive" });
+      return;
     }
+    files.forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => setPhotos((prev) => [...prev, reader.result as string]);
+      reader.readAsDataURL(file);
+    });
+    e.target.value = "";
+  };
+
+  const removePhoto = (index: number) => {
+    setPhotos((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -41,7 +50,12 @@ const Signup = () => {
       return;
     }
 
-    const user = { ...form, avatar, username: form.name || form.phone };
+    const user = {
+      ...form,
+      avatar: photos[0] || null,
+      photos,
+      username: form.name || form.phone,
+    };
     localStorage.setItem("user", JSON.stringify(user));
     toast({ title: "Account created!", description: "Welcome to ChatFlow." });
     navigate("/discover");
@@ -66,19 +80,37 @@ const Signup = () => {
           <h2 className="text-2xl font-bold text-foreground text-center mb-6">Create Account</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Avatar upload */}
-            <div className="flex justify-center">
-              <label className="cursor-pointer group">
-                <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-                <div className="w-20 h-20 rounded-full border-2 border-dashed border-border flex items-center justify-center overflow-hidden bg-muted group-hover:border-primary transition-colors">
-                  {avatar ? (
-                    <img src={avatar} alt="Avatar" className="w-full h-full object-cover" />
-                  ) : (
-                    <Upload className="w-6 h-6 text-muted-foreground" />
-                  )}
-                </div>
-                <p className="text-xs text-muted-foreground text-center mt-1">Upload photo</p>
-              </label>
+            {/* Photo uploads */}
+            <div>
+              <Label className="text-xs text-muted-foreground mb-2 block">Upload Photos (up to 4)</Label>
+              <div className="flex gap-2 flex-wrap">
+                {photos.map((photo, i) => (
+                  <div key={i} className="relative w-[72px] h-[72px] rounded-xl overflow-hidden border border-border group">
+                    <img src={photo} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => removePhoto(i)}
+                      className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                    {i === 0 && (
+                      <span className="absolute bottom-0 left-0 right-0 bg-primary/80 text-primary-foreground text-[9px] text-center py-0.5">
+                        Main
+                      </span>
+                    )}
+                  </div>
+                ))}
+                {photos.length < 4 && (
+                  <label className="cursor-pointer">
+                    <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" multiple />
+                    <div className="w-[72px] h-[72px] rounded-xl border-2 border-dashed border-border flex flex-col items-center justify-center bg-muted hover:border-primary transition-colors">
+                      <ImagePlus className="w-5 h-5 text-muted-foreground" />
+                      <span className="text-[9px] text-muted-foreground mt-0.5">Add</span>
+                    </div>
+                  </label>
+                )}
+              </div>
             </div>
 
             <div className="space-y-1.5">
