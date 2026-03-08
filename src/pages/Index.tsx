@@ -44,7 +44,7 @@ const Index = () => {
           <div className="flex items-center gap-2 md:gap-3">
             <ThemeToggle />
             <Link to="/login">
-              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+              <Button variant="ghost" size="sm" className="text-white/80 hover:text-white hover:bg-white/10">
                 Login
               </Button>
             </Link>
