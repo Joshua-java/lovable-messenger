@@ -13,14 +13,17 @@ const floatingAnim = (delay: number, y: number = 20) => ({
 
 const Index = () => {
   return (
-    <div className="relative min-h-screen bg-background overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Fullscreen background image */}
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${heroImage})` }} />
+      <div className="absolute inset-0 bg-black/60" />
+
       {/* Floating decorative blobs */}
       <div className="absolute top-20 -left-32 w-96 h-96 rounded-full bg-primary/10 blur-3xl animate-pulse" />
       <div className="absolute bottom-20 -right-32 w-80 h-80 rounded-full bg-primary/5 blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-3xl" />
       <div className="absolute top-40 right-20 w-4 h-4 rounded-full bg-primary/30 animate-bounce" style={{ animationDelay: "0.5s" }} />
-      <div className="absolute top-60 left-20 w-3 h-3 rounded-full bg-primary/20 animate-bounce" style={{ animationDelay: "1s" }} />
-      <div className="absolute bottom-40 left-1/3 w-5 h-5 rounded-full bg-primary/15 animate-bounce" style={{ animationDelay: "1.5s" }} />
+      <div className="absolute top-60 left-20 w-3 h-3 rounded-full bg-white/20 animate-bounce" style={{ animationDelay: "1s" }} />
+      <div className="absolute bottom-40 left-1/3 w-5 h-5 rounded-full bg-white/15 animate-bounce" style={{ animationDelay: "1.5s" }} />
       <div className="absolute top-32 right-1/3 w-2 h-2 rounded-full bg-primary/40 animate-ping" />
 
       {/* Content */}
