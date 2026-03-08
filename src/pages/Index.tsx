@@ -150,8 +150,8 @@ const Index = () => {
         </div>
 
         {/* Footer */}
-        <div className="border-t border-border px-6 py-6 text-center">
-          <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm">
+        <div className="border-t border-white/10 px-6 py-6 text-center">
+          <div className="flex items-center justify-center gap-2 text-white/50 text-sm">
             <Shield className="w-4 h-4" />
             <span>Secure • Private • Fast</span>
           </div>
