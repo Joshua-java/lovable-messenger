@@ -59,7 +59,7 @@ const Index = () => {
         {/* Hero */}
         <div className="flex-1 flex flex-col items-center justify-center px-6 text-center py-16">
           <motion.div {...floatingAnim(0.1)} className="mb-6">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white text-sm font-medium border border-white/20">
               <Zap className="w-3.5 h-3.5" />
               Connect with people near you
             </span>
