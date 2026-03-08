@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, MapPin, Filter, MessageCircle, LogOut, Users } from "lucide-react";
+import { Search, MapPin, Filter, MessageCircle, LogOut, Users, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -8,41 +8,19 @@ import { Badge } from "@/components/ui/badge";
 import ThemeToggle from "@/components/ThemeToggle";
 
 const CITY_COORDS: Record<string, { lat: number; lng: number }> = {
-  uyo: { lat: 5.05, lng: 7.93 },
-  eket: { lat: 4.64, lng: 7.94 },
-  "port harcourt": { lat: 4.82, lng: 7.03 },
-  calabar: { lat: 4.95, lng: 8.32 },
-  aba: { lat: 5.12, lng: 7.37 },
-  warri: { lat: 5.52, lng: 5.76 },
-  benin: { lat: 6.34, lng: 5.63 },
-  lagos: { lat: 6.52, lng: 3.38 },
-  abuja: { lat: 9.06, lng: 7.49 },
-  enugu: { lat: 6.44, lng: 7.50 },
-  oron: { lat: 4.83, lng: 8.24 },
-  "ikot ekpene": { lat: 5.18, lng: 7.71 },
+  uyo: { lat: 5.05, lng: 7.93 }, eket: { lat: 4.64, lng: 7.94 }, "port harcourt": { lat: 4.82, lng: 7.03 },
+  calabar: { lat: 4.95, lng: 8.32 }, aba: { lat: 5.12, lng: 7.37 }, warri: { lat: 5.52, lng: 5.76 },
+  benin: { lat: 6.34, lng: 5.63 }, lagos: { lat: 6.52, lng: 3.38 }, abuja: { lat: 9.06, lng: 7.49 },
+  enugu: { lat: 6.44, lng: 7.50 }, oron: { lat: 4.83, lng: 8.24 }, "ikot ekpene": { lat: 5.18, lng: 7.71 },
 };
 
 const getDistance = (city1: string, city2: string): number => {
-  const a = CITY_COORDS[city1.toLowerCase()];
-  const b = CITY_COORDS[city2.toLowerCase()];
+  const a = CITY_COORDS[city1.toLowerCase()]; const b = CITY_COORDS[city2.toLowerCase()];
   if (!a || !b) return 9999;
-  const dx = (a.lat - b.lat) * 111;
-  const dy = (a.lng - b.lng) * 111;
-  return Math.sqrt(dx * dx + dy * dy);
+  return Math.sqrt(((a.lat - b.lat) * 111) ** 2 + ((a.lng - b.lng) * 111) ** 2);
 };
 
-interface MockUser {
-  id: string;
-  name: string;
-  phone: string;
-  gender: string;
-  city: string;
-  state: string;
-  country: string;
-  avatar: string | null;
-  online: boolean;
-  bio: string;
-}
+interface MockUser { id: string; name: string; phone: string; gender: string; city: string; state: string; country: string; avatar: string | null; online: boolean; bio: string; }
 
 const MOCK_USERS: MockUser[] = [
   { id: "1", name: "Aniekan Udoh", phone: "+234 812 000 0001", gender: "male", city: "Uyo", state: "Akwa Ibom", country: "Nigeria", avatar: null, online: true, bio: "Love music and tech 🎵" },
@@ -88,8 +66,7 @@ const Discover = () => {
   const getDistanceLabel = (city: string) => {
     if (!myCity) return "";
     const d = getDistance(myCity, city);
-    if (d < 1) return "Same city";
-    return `~${Math.round(d)} km away`;
+    return d < 1 ? "Same city" : `~${Math.round(d)} km away`;
   };
 
   const handleSelectUser = (selectedUser: MockUser) => {
@@ -108,11 +85,6 @@ const Discover = () => {
           <span className="font-bold text-foreground text-lg">People Near You</span>
         </div>
         <div className="flex items-center gap-2">
-          {user.avatar && (
-            <Avatar className="w-8 h-8">
-              <img src={user.avatar} alt="" className="w-full h-full object-cover rounded-full" />
-            </Avatar>
-          )}
           <span className="text-sm text-muted-foreground hidden sm:block">{myCity || "No location"}</span>
           <ThemeToggle />
           <Button variant="ghost" size="icon" onClick={handleLogout} className="text-muted-foreground hover:text-destructive">
@@ -121,20 +93,27 @@ const Discover = () => {
         </div>
       </div>
 
-      {/* Group Chat Banner */}
-      <button
-        onClick={() => navigate("/group")}
-        className="mx-4 mt-3 flex items-center gap-3 p-3 rounded-xl bg-primary/10 border border-primary/20 hover:bg-primary/15 transition-colors"
-      >
-        <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0">
-          <Users className="w-5 h-5 text-primary-foreground" />
-        </div>
-        <div className="flex-1 text-left">
-          <p className="font-semibold text-foreground text-sm">{myCity ? `${myCity} Community` : "Local Community"}</p>
-          <p className="text-xs text-muted-foreground">Join your local group chat • Share & connect</p>
-        </div>
-        <MessageCircle className="w-5 h-5 text-primary" />
-      </button>
+      {/* Quick links */}
+      <div className="flex gap-2 px-4 mt-3">
+        <button onClick={() => navigate("/group")} className="flex-1 flex items-center gap-3 p-3 rounded-xl bg-primary/10 border border-primary/20 hover:bg-primary/15 transition-colors">
+          <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0">
+            <Users className="w-4 h-4 text-primary-foreground" />
+          </div>
+          <div className="text-left">
+            <p className="font-semibold text-foreground text-sm">{myCity || "Local"} Community</p>
+            <p className="text-[11px] text-muted-foreground">Group chat</p>
+          </div>
+        </button>
+        <button onClick={() => navigate("/videos")} className="flex-1 flex items-center gap-3 p-3 rounded-xl bg-primary/10 border border-primary/20 hover:bg-primary/15 transition-colors">
+          <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0">
+            <Play className="w-4 h-4 text-primary-foreground ml-0.5" />
+          </div>
+          <div className="text-left">
+            <p className="font-semibold text-foreground text-sm">Videos</p>
+            <p className="text-[11px] text-muted-foreground">Watch & share</p>
+          </div>
+        </button>
+      </div>
 
       {/* Filters */}
       <div className="px-4 py-3 border-b border-border space-y-3">
@@ -146,15 +125,13 @@ const Discover = () => {
           <Filter className="w-4 h-4 text-muted-foreground" />
           {(["all", "male", "female"] as const).map((g) => (
             <button key={g} onClick={() => setGenderFilter(g)}
-              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${genderFilter === g ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-accent"}`}
-            >
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${genderFilter === g ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-accent"}`}>
               {g === "all" ? "All" : g === "male" ? "👨 Male" : "👩 Female"}
             </button>
           ))}
           <span className="w-px h-4 bg-border" />
           <button onClick={() => setShowNearbyOnly(!showNearbyOnly)}
-            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${showNearbyOnly ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-accent"}`}
-          >
+            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${showNearbyOnly ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-accent"}`}>
             📍 Nearby only
           </button>
         </div>
@@ -166,10 +143,8 @@ const Discover = () => {
           <div className="flex flex-col items-center justify-center h-full text-center px-6">
             <Users className="w-12 h-12 text-muted-foreground/30 mb-3" />
             <p className="text-muted-foreground font-medium">No people found</p>
-            <p className="text-sm text-muted-foreground/70 mt-1">Try changing your filters or search</p>
-            {showNearbyOnly && (
-              <Button variant="outline" size="sm" className="mt-3" onClick={() => setShowNearbyOnly(false)}>Show all regions</Button>
-            )}
+            <p className="text-sm text-muted-foreground/70 mt-1">Try changing your filters</p>
+            {showNearbyOnly && <Button variant="outline" size="sm" className="mt-3" onClick={() => setShowNearbyOnly(false)}>Show all regions</Button>}
           </div>
         ) : (
           <div className="divide-y divide-border">
@@ -177,18 +152,12 @@ const Discover = () => {
               const distLabel = getDistanceLabel(person.city);
               const isSameCity = myCity.toLowerCase() === person.city.toLowerCase();
               return (
-                <button key={person.id} onClick={() => handleSelectUser(person)}
-                  className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-accent/50 transition-colors text-left"
-                >
+                <button key={person.id} onClick={() => handleSelectUser(person)} className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-accent/50 transition-colors text-left">
                   <div className="relative">
                     <Avatar className="w-12 h-12">
-                      <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                        {person.name.split(" ").map((n) => n[0]).join("")}
-                      </AvatarFallback>
+                      <AvatarFallback className="bg-primary/10 text-primary font-semibold">{person.name.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
                     </Avatar>
-                    {person.online && (
-                      <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-card" style={{ backgroundColor: "hsl(142, 71%, 45%)" }} />
-                    )}
+                    {person.online && <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-card" style={{ backgroundColor: "hsl(var(--success))" }} />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">

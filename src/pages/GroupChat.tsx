@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, MapPin, Users, MessageCircle, Image as ImageIcon } from "lucide-react";
+import { ArrowLeft, MapPin, Users, MessageCircle, Play } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -16,15 +16,16 @@ interface GroupPost {
   senderAvatar: string | null;
   time: string;
   image: string | null;
+  video: string | null;
 }
 
 const MOCK_GROUP_POSTS: GroupPost[] = [
-  { id: "g1", text: "Hello everyone from Uyo! 🎉 Anyone selling iPhone 14?", sender: "+234 812 000 0001", senderName: "Aniekan Udoh", senderCity: "Uyo", senderAvatar: null, time: "09:15 AM", image: null },
-  { id: "g2", text: "Fresh fish available in Eket market today! 🐟", sender: "+234 812 000 0003", senderName: "Emem Bassey", senderCity: "Eket", senderAvatar: null, time: "09:30 AM", image: null },
-  { id: "g3", text: "Looking for a fashion designer in Uyo area ✨", sender: "+234 812 000 0002", senderName: "Blessing Edet", senderCity: "Uyo", senderAvatar: null, time: "10:00 AM", image: null },
-  { id: "g4", text: "Beautiful sunset from Port Harcourt 🌅", sender: "+234 812 000 0008", senderName: "Chidi Nwosu", senderCity: "Port Harcourt", senderAvatar: null, time: "10:45 AM", image: null },
-  { id: "g5", text: null, sender: "+234 812 000 0007", senderName: "Grace Okon", senderCity: "Calabar", senderAvatar: null, time: "11:20 AM", image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop" },
-  { id: "g6", text: "My latest cake design! Orders open 🍰", sender: "+234 812 000 0007", senderName: "Grace Okon", senderCity: "Calabar", senderAvatar: null, time: "11:21 AM", image: null },
+  { id: "g1", text: "Hello everyone from Uyo! 🎉 Anyone selling iPhone 14?", sender: "+234 812 000 0001", senderName: "Aniekan Udoh", senderCity: "Uyo", senderAvatar: null, time: "09:15 AM", image: null, video: null },
+  { id: "g2", text: "Fresh fish available in Eket market today! 🐟", sender: "+234 812 000 0003", senderName: "Emem Bassey", senderCity: "Eket", senderAvatar: null, time: "09:30 AM", image: null, video: null },
+  { id: "g3", text: "Looking for a fashion designer in Uyo area ✨", sender: "+234 812 000 0002", senderName: "Blessing Edet", senderCity: "Uyo", senderAvatar: null, time: "10:00 AM", image: null, video: null },
+  { id: "g4", text: "Beautiful sunset from Port Harcourt 🌅", sender: "+234 812 000 0008", senderName: "Chidi Nwosu", senderCity: "Port Harcourt", senderAvatar: null, time: "10:45 AM", image: null, video: null },
+  { id: "g5", text: null, sender: "+234 812 000 0007", senderName: "Grace Okon", senderCity: "Calabar", senderAvatar: null, time: "11:20 AM", image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop", video: null },
+  { id: "g6", text: "My latest cake design! Orders open 🍰", sender: "+234 812 000 0007", senderName: "Grace Okon", senderCity: "Calabar", senderAvatar: null, time: "11:21 AM", image: null, video: null },
 ];
 
 const CITY_COORDS: Record<string, { lat: number; lng: number }> = {
@@ -64,37 +65,19 @@ const GroupChat = () => {
     if (!user) navigate("/login");
   }, [user, navigate]);
 
-  const nearbyCities = useMemo(() => {
-    if (!myCity) return [];
-    return Object.keys(CITY_COORDS)
-      .filter((c) => getDistance(myCity, c) < 200)
-      .map((c) => c.toLowerCase());
-  }, [myCity]);
-
   const filteredPosts = useMemo(() => {
     if (filterCity === "all") return posts;
-    return posts.filter((p) => {
-      const d = getDistance(myCity, p.senderCity);
-      return d < 200;
-    });
+    return posts.filter((p) => getDistance(myCity, p.senderCity) < 200);
   }, [posts, filterCity, myCity]);
 
   const now = () => new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
   const handleSendText = (text: string) => {
-    setPosts((prev) => [...prev, {
-      id: Date.now(),
-      text,
-      sender: user?.phone || "",
-      senderName: user?.name || "You",
-      senderCity: myCity,
-      senderAvatar: user?.avatar || null,
-      time: now(),
-      image: null,
-    }]);
+    setPosts((prev) => [...prev, { id: Date.now(), text, sender: user?.phone || "", senderName: user?.name || "You", senderCity: myCity, senderAvatar: user?.avatar || null, time: now(), image: null, video: null }]);
   };
 
   const handleSendImage = (file: File, caption?: string) => {
+    const isVideo = file.type.startsWith("video/");
     setPosts((prev) => [...prev, {
       id: Date.now(),
       text: caption || null,
@@ -103,22 +86,14 @@ const GroupChat = () => {
       senderCity: myCity,
       senderAvatar: user?.avatar || null,
       time: now(),
-      image: URL.createObjectURL(file),
+      image: isVideo ? null : URL.createObjectURL(file),
+      video: isVideo ? URL.createObjectURL(file) : null,
     }]);
   };
 
   const handleContactUser = (post: GroupPost) => {
     sessionStorage.setItem("chatWith", JSON.stringify({
-      id: post.sender,
-      name: post.senderName,
-      phone: post.sender,
-      city: post.senderCity,
-      state: "",
-      country: "Nigeria",
-      avatar: post.senderAvatar,
-      online: true,
-      bio: "",
-      gender: "",
+      id: post.sender, name: post.senderName, phone: post.sender, city: post.senderCity, state: "", country: "Nigeria", avatar: post.senderAvatar, online: true, bio: "", gender: "",
     }));
     navigate("/chat");
   };
@@ -149,25 +124,17 @@ const GroupChat = () => {
         <ThemeToggle />
       </div>
 
-      {/* Filter bar */}
+      {/* Filter */}
       <div className="flex items-center gap-2 px-4 py-2 border-b border-border bg-card/80">
         {(["nearby", "all"] as const).map((f) => (
-          <button
-            key={f}
-            onClick={() => setFilterCity(f)}
-            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-              filterCity === f ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-accent"
-            }`}
-          >
+          <button key={f} onClick={() => setFilterCity(f)} className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${filterCity === f ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-accent"}`}>
             {f === "nearby" ? "📍 Nearby" : "🌍 All"}
           </button>
         ))}
-        {myCity && (
-          <span className="text-xs text-muted-foreground ml-auto">Your area: {myCity}</span>
-        )}
+        {myCity && <span className="text-xs text-muted-foreground ml-auto">Your area: {myCity}</span>}
       </div>
 
-      {/* Posts feed */}
+      {/* Posts */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
         {filteredPosts.map((post) => {
           const isMe = post.sender === user?.phone;
@@ -177,7 +144,6 @@ const GroupChat = () => {
 
           return (
             <div key={post.id} className="bg-card rounded-2xl border border-border p-4 space-y-3">
-              {/* Post header */}
               <div className="flex items-center gap-3">
                 <Avatar className="w-9 h-9">
                   {post.senderAvatar ? (
@@ -198,19 +164,18 @@ const GroupChat = () => {
                 </div>
                 {!isMe && (
                   <Button variant="ghost" size="sm" onClick={() => handleContactUser(post)} className="text-primary text-xs shrink-0">
-                    <MessageCircle className="w-4 h-4 mr-1" />
-                    Chat
+                    <MessageCircle className="w-4 h-4 mr-1" /> Chat
                   </Button>
                 )}
               </div>
 
-              {/* Post content */}
+              {post.video && (
+                <video src={post.video} controls className="w-full rounded-xl max-h-72 bg-muted" preload="metadata" />
+              )}
               {post.image && (
                 <img src={post.image} alt="" className="w-full rounded-xl max-h-72 object-cover" />
               )}
-              {post.text && (
-                <p className="text-sm text-foreground whitespace-pre-wrap">{post.text}</p>
-              )}
+              {post.text && <p className="text-sm text-foreground whitespace-pre-wrap">{post.text}</p>}
             </div>
           );
         })}
