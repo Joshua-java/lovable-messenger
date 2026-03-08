@@ -81,7 +81,7 @@ const Index = () => {
 
           <motion.p
             {...floatingAnim(0.35, 25)}
-            className="text-lg md:text-xl text-muted-foreground mt-6 max-w-lg leading-relaxed"
+            className="text-lg md:text-xl text-white/70 mt-6 max-w-lg leading-relaxed"
           >
             Discover people in your region, share videos with your community, and build meaningful connections.
           </motion.p>
