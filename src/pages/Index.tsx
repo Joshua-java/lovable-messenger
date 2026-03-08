@@ -110,8 +110,8 @@ const Index = () => {
               { label: "Messages/Day", value: "10K+" },
             ].map((stat) => (
               <div key={stat.label}>
-                <p className="text-2xl md:text-3xl font-bold text-foreground">{stat.value}</p>
-                <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
+                <p className="text-2xl md:text-3xl font-bold text-white">{stat.value}</p>
+                <p className="text-xs text-white/60 mt-1">{stat.label}</p>
               </div>
             ))}
           </motion.div>
