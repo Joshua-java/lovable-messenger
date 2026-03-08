@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { MessageCircle, Video, Users, Globe, Zap, Shield, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/ThemeToggle";
+import heroImage from "@/assets/hero-welcome.jpg";
 import { motion } from "framer-motion";
 
 const floatingAnim = (delay: number, y: number = 20) => ({
