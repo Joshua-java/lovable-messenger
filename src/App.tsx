@@ -10,6 +10,7 @@ import Discover from "./pages/Discover";
 import Chat from "./pages/Chat";
 import GroupChat from "./pages/GroupChat";
 import Videos from "./pages/Videos";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/chat" element={<Chat />} />
           <Route path="/group" element={<GroupChat />} />
           <Route path="/videos" element={<Videos />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
