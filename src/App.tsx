@@ -10,6 +10,7 @@ import Discover from "./pages/Discover";
 import Chat from "./pages/Chat";
 import GroupChat from "./pages/GroupChat";
 import Videos from "./pages/Videos";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
