@@ -111,6 +111,9 @@ const Chat = () => {
             <span className="text-xs text-muted-foreground ml-1">• {chatWith.online ? "Online" : "Offline"}</span>
           </div>
         </div>
+        <Button variant="ghost" size="icon" onClick={() => navigate("/profile")} className="text-muted-foreground hover:text-primary shrink-0">
+          <User className="w-4 h-4" />
+        </Button>
       </div>
 
       <ChatMessages messages={messages} isTyping={isTyping} />

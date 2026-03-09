@@ -126,6 +126,9 @@ const Videos = () => {
           <span className="font-bold text-foreground">Videos</span>
         </div>
         <ThemeToggle />
+        <Button variant="ghost" size="icon" onClick={() => navigate("/profile")} className="text-muted-foreground hover:text-primary">
+          <User className="w-4 h-4" />
+        </Button>
         <Button size="sm" onClick={() => setShowUpload(true)} className="rounded-full gap-1.5">
           <Plus className="w-4 h-4" /> Upload
         </Button>
