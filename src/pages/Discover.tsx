@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, MapPin, Filter, MessageCircle, LogOut, Users, Play } from "lucide-react";
+import { Search, MapPin, Filter, MessageCircle, LogOut, Users, Play, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
