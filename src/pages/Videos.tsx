@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Upload, Play, MapPin, Heart, MessageCircle, Plus } from "lucide-react";
+import { ArrowLeft, Upload, Play, MapPin, Heart, MessageCircle, Plus, User } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
