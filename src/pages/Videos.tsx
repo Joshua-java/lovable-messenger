@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Upload, Play, MapPin, Heart, MessageCircle, Plus } from "lucide-react";
+import { ArrowLeft, Upload, Play, MapPin, Heart, MessageCircle, Plus, User } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -126,6 +126,9 @@ const Videos = () => {
           <span className="font-bold text-foreground">Videos</span>
         </div>
         <ThemeToggle />
+        <Button variant="ghost" size="icon" onClick={() => navigate("/profile")} className="text-muted-foreground hover:text-primary">
+          <User className="w-4 h-4" />
+        </Button>
         <Button size="sm" onClick={() => setShowUpload(true)} className="rounded-full gap-1.5">
           <Plus className="w-4 h-4" /> Upload
         </Button>

@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, MapPin, Filter, MessageCircle, LogOut, Users, Play } from "lucide-react";
+import { Search, MapPin, Filter, MessageCircle, LogOut, Users, Play, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -93,6 +93,9 @@ const Discover = () => {
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground hidden sm:block">{myCity || "No location"}</span>
           <ThemeToggle />
+          <Button variant="ghost" size="icon" onClick={() => navigate("/profile")} className="text-muted-foreground hover:text-primary">
+            <User className="w-4 h-4" />
+          </Button>
           <Button variant="ghost" size="icon" onClick={handleLogout} className="text-muted-foreground hover:text-destructive">
             <LogOut className="w-4 h-4" />
           </Button>
